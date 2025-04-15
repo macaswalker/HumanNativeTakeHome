@@ -1,0 +1,32 @@
+# Python cache and system files
+__pycache__/
+*.py[cod]
+*.so
+*.ipynb_checkpoints/
+
+# Virtual environment
+humannative/
+
+# VSCode and Jupyter
+.vscode/
+*.code-workspace
+*.jupyter
+
+# MacOS metadata
+.DS_Store
+
+# Logs and outputs
+*.log
+*.out
+*.tmp
+
+# Checkpoints, models, and large outputs
+checkpoints/
+*.ckpt
+*.pt
+*.pth
+*.h5
+
+# Experiment tracking
+mlruns/
+wandb/
