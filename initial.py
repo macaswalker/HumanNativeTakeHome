@@ -58,3 +58,6 @@ for mode in sorted(df["pii_mode"].unique()):
 ## compare between the two models (sometimes - it is better to just use ootb )
 
 ## also time taken - this is 170 seconds for 1000 paragraphs at around 6 snetcnes each
+
+
+### THIS IS A SCRIPT WHICH TESTS OUR TRANSFORMER
