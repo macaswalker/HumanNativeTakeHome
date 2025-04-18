@@ -1,51 +1,90 @@
 # Take-Home Assignment
 
-## First Look Notes
-
-Aurora Articles: They publish blogs and articles (hence, heavily text based)
-
-Some articles contain personally identifiable information (we need to define what this is)
-
 We want to build a service that allows licensees to report data the expect is
-in violation of local laws or regulations
+in violation of local laws or regulations. 
 
 The service will allow consumers to provide structured information about
-WHERE: where in the original piece of media
-WHY: what it is violation of
-HOW: how it is in violation of local laws and regulation
+- WHERE: where in the original piece of media
+- WHY: what it is violation of
+- HOW: how it is in violation of local laws and regulation
 
-This system supports all types of multimedia (text, image, audio, video, animation)
+Key Assumptions:
+- Trying to detail 'WHERE' means giving a token/character level description of where PII is in the text.
+- Trying to detail 'WHY' means reporting back what kind of PII it is (name, email, etc)
+- We will only focus on textual data
+- We will only focus on a subsection of all PII: NAME, EMAIL, LOCATION, PHONE, URL.
+- Synthetic data reflects real-world cases: we have trained and tested on synthetic data - hence, implicitly, we assume our synthetic data contains enough breadth to properly model real-world data.
+- Cost constraints limit Third-Party API's: Due to scale of our data size, it would be prohibitve to use cloud API PII detection services.
+- Only English supported (but framework flexible enough to include other languages)
+- No persistence required
 
-Currently, we have a team of people in operations that review the manually submitted violations and mark them as valid or invalid. They receive nearly 100,00 violations a month and this number is growing - we NEED automate.
-
-The engineering team is looking for feedback on their data model to see whether the way they store their data makes the machine learning task easy or hard, but have decided to store flagged data as follows:
-
-Dataset(ord_id, id, name, type)
-
-Data(dataset_id, id, value, flag)
-
-We want to build a model that can automatically flag data that might be in violation.
-
-So what is the problem?
-
-We want something that takes in a set of text (at its MVP level), and returns a dataset. we want this dataset 
+Please see ```Pii_Detection_walkthrough.ipynb``` for a full walkthrough of the model, how it is used and the discussion around Data and Datasets.
 
 
-First Thoughs - Getting an API to do it!
+The structure of the repo is as follows:
 
-Average Blog Post: 1500-2000 words, 
-7500 - 13000 - lets say 10000 characters.
+```
 
-We have 300,000 pieces of media already! 
+HumanNativeTakeHome/
+├── data/                          # Synthetic and test datasets
+│   ├── Data.csv                  # Main training data (csv)
+│   ├── Data.json                 # Main training data (json)
+│   └── test/
+│       ├── test_Data.csv         # Data created explicityly for test purporses (csv)
+│       └── test_Data.json        # Data created explicityly for test purporses (json)
+│
+├── pii_ner_model/                # Trained DistilBERT PII token classification model
+│   └── (Hugging Face files)      # tokenizer, config, weights
+│
+├── scripts/                      # CLI scripts for common tasks
+│   ├── generate_dataset.py       # Generate main training dataset
+│   ├── generate_test_dataset.py  # Generate test dataset
+│   └── train_model.py            # Train BERT model on token-labeled PII
+│
+├── src/
+│   ├── data/
+│   │   ├── data_generation.py     # Faker-based blog (6 sentences) + PII generator
+│   │   └── dataset_builder.py     # Wraps generation into a saved dataset (csv and json)
+│   │
+│   ├── models/
+│   │   └── utils.py               # Tag mappings: tag2id, id2tag
+│   │
+│   ├── training/
+│   │   ├── train.py               # Core BERT training loop
+│   │   ├── dataset.py             # PyTorch Dataset class for token-level labeling
+│   │   └── token_classifier.py    # Token-based inference for raw text
+│   │
+│   ├── evaluation/
+│   │   └── token_classifier.py    # Evaluate model on dataframe
+│   │
+│   ├── presidio/
+│   │   ├── detector.py            # Simple wrapper over default Presidio detection
+│   │   └── anonymizer.py          # Redact PII using detection results
+│
+├── Pii_Detection_walkthrough.ipynb  # Full end-to-end project walkthrough
+│
+├── .gitattributes                # Git LFS configuration for model weights
+├── requirements.txt              # Python dependencies
+└── README.md                     # Project explanation, run through, asssumptions
 
-Assuming we are only working with textual data - this is 
-300,000 * 10000 = 3000000000 or 3 Billion Characthers!
+```
 
-Hence, if we are going to use APIs, we cannot use anything prohibitively expensive.
+To run through the scripts yourself, please follow these instructions:
 
+```
+# 1. Install dependencies
+pip install -r requirements.txt
 
+# 2. Generate training data
+python scripts/generate_dataset.py
 
-Microsoft Azure: Measure in Text Records (1000 characters), hence 3million text records - £1060.835 pounds per month )-: (https://azure.microsoft.com/en-us/pricing/details/cognitive-services/language-service/)
+# 3. Generate test data
+python scripts/generate_test_dataset.py
 
-Microsoft Presidio - is free! awesome (https://microsoft.github.io/presidio/samples/python/presidio_notebook/)
+# 4. Train the DistilBERT token classification model
+python scripts/train_model.py
+
+# Evaluation code is in the notebook
+
+```
 

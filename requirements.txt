@@ -17,10 +17,13 @@ cymem==2.0.11
 debugpy==1.8.14
 decorator==5.2.1
 en_core_web_lg @ https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.8.0/en_core_web_lg-3.8.0-py3-none-any.whl#sha256=293e9547a655b25499198ab15a525b05b9407a75f10255e405e8c3854329ab63
+en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl#sha256=1932429db727d4bff3deed6b34cfc05df17794f4a52eeb26cf8928f7c1a0fb85
 executing==2.2.0
+Faker==37.1.0
 filelock==3.18.0
 fonttools==4.57.0
 fsspec==2025.3.2
+huggingface-hub==0.30.2
 idna==3.10
 ipykernel==6.29.5
 ipython==9.1.0
@@ -71,6 +74,7 @@ regex==2024.11.6
 requests==2.32.3
 requests-file==2.1.0
 rich==14.0.0
+safetensors==0.5.3
 scikit-learn==1.6.1
 scipy==1.15.2
 setuptools==78.1.0
@@ -78,6 +82,7 @@ shellingham==1.5.4
 six==1.17.0
 smart-open==7.1.0
 spacy==3.8.5
+spacy-alignments==0.9.1
 spacy-legacy==3.0.12
 spacy-loggers==1.0.5
 srsly==2.5.1
@@ -86,12 +91,14 @@ sympy==1.13.3
 thinc==8.3.6
 threadpoolctl==3.6.0
 tldextract==5.2.0
+tokenizers==0.15.2
 torch==2.2.2
 torchaudio==2.2.2
 torchvision==0.17.2
 tornado==6.4.2
 tqdm==4.67.1
 traitlets==5.14.3
+transformers==4.36.2
 typer==0.15.2
 typing-inspection==0.4.0
 typing_extensions==4.13.2
