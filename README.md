@@ -1,4 +1,4 @@
-# Take-Home Assignment
+# PII Detection
 
 We want to build a service that allows licensees to report data the expect is
 in violation of local laws or regulations. 
